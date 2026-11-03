@@ -1,9 +1,9 @@
 package com.baleras.api.Service;
 
 import com.baleras.api.Entity.Usuario;
-import com.baleras.api.config.JwtConfig;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -16,15 +16,15 @@ public class JwtService {
 
     private final SecretKey secretKey;
 
-    public JwtService(JwtConfig jwtConfig) {
-
-        this.secretKey = Keys.hmacShaKeyFor(
-                jwtConfig.secret().getBytes(StandardCharsets.UTF_8)
-        );
+    // Inyección directa del secret con fallback
+    public JwtService(@Value("${jwt.secret:${JWT_SECRET:ClaveSecretaSuperLargaYCompletamenteSeguraParaFirmarTokensJWT2026Baleras}}") String secret) {
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalArgumentException("La clave JWT no puede ser nula ni vacía");
+        }
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generarToken(Usuario usuario) {
-
         Instant ahora = Instant.now();
         Instant expiracion = ahora.plusSeconds(3600);
 
@@ -38,7 +38,6 @@ public class JwtService {
     }
 
     public String obtenerEmail(String token) {
-
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
@@ -48,18 +47,13 @@ public class JwtService {
     }
 
     public boolean esValido(String token) {
-
         try {
-
             Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(token);
-
             return true;
-
         } catch (Exception e) {
-
             return false;
         }
     }

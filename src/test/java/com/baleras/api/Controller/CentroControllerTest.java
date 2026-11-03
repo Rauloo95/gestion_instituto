@@ -84,8 +84,7 @@ class CentroControllerTest {
                 "28001",
                 "600123456",
                 "centro@email.com",
-                true
-        );
+                true);
     }
 
     private String jsonCentro() {
@@ -214,8 +213,8 @@ class CentroControllerTest {
                 .thenReturn(crearCentroResponse());
 
         mockMvc.perform(post("/api/centros")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.nombre").value("Centro Baleras"));
@@ -228,8 +227,8 @@ class CentroControllerTest {
     void crear_profesor_devuelve403() throws Exception {
 
         mockMvc.perform(post("/api/centros")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(centroService);
@@ -240,8 +239,8 @@ class CentroControllerTest {
     void crear_alumno_devuelve403() throws Exception {
 
         mockMvc.perform(post("/api/centros")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(centroService);
@@ -264,8 +263,8 @@ class CentroControllerTest {
                 """;
 
         mockMvc.perform(post("/api/centros")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.errors.nombre").exists());
@@ -290,8 +289,8 @@ class CentroControllerTest {
                 """;
 
         mockMvc.perform(post("/api/centros")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.errors.tipo").exists());
@@ -316,8 +315,8 @@ class CentroControllerTest {
                 """;
 
         mockMvc.perform(post("/api/centros")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.errors.email").exists());
@@ -337,8 +336,8 @@ class CentroControllerTest {
                 .thenReturn(crearCentroResponse());
 
         mockMvc.perform(put("/api/centros/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1));
 
@@ -350,8 +349,8 @@ class CentroControllerTest {
     void actualizar_profesor_devuelve403() throws Exception {
 
         mockMvc.perform(put("/api/centros/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(centroService);
@@ -362,8 +361,8 @@ class CentroControllerTest {
     void actualizar_alumno_devuelve403() throws Exception {
 
         mockMvc.perform(put("/api/centros/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isForbidden());
 
         verifyNoInteractions(centroService);
@@ -377,8 +376,8 @@ class CentroControllerTest {
                 .thenThrow(new ResourceNotFoundException("Centro no encontrado"));
 
         mockMvc.perform(put("/api/centros/99")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonCentro()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonCentro()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404));
 
