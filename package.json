@@ -1,0 +1,9 @@
+{
+  "name": "gestion-baleras",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix Frontend",
+    "build": "npm run build --prefix Frontend"
+  }
+}
+
