@@ -11,9 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-@Controller
-@RequestMapping("api/usuarios")
+@RestController
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     // Servicio
