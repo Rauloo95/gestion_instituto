@@ -26,7 +26,7 @@ export interface RegisterRequest {
   apellidos: string;
   email: string;
   password: string;
-  rol?: Rol;
+  rol: Rol;
 }
 
 export interface ApiError {
@@ -36,4 +36,3 @@ export interface ApiError {
   message: string;
   errors?: Record<string, string>;
 }
-

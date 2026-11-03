@@ -43,7 +43,7 @@ public class AuthController {
                 request.apellidos(),
                 request.email(),
                 request.password(),
-                com.baleras.api.Entity.Rol.ALUMNO
+                request.rol() != null ? request.rol() : com.baleras.api.Entity.Rol.ALUMNO
         );
 
         return ResponseEntity

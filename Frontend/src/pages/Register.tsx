@@ -2,13 +2,29 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getApiErrorMessage } from '../api/client';
-import { GraduationCap, User, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import type { Rol } from '../types/auth';
+import {
+  Users,
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Shield,
+  GraduationCap,
+  BookOpen,
+  Loader2,
+  AlertCircle,
+  CheckCircle2
+} from 'lucide-react';
 
 export function Register() {
   const [nombre, setNombre] = useState('');
   const [apellidos, setApellidos] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rol, setRol] = useState<Rol>('ALUMNO');
+
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -21,6 +37,16 @@ export function Register() {
     e.preventDefault();
     setErrorMessage('');
 
+    if (!nombre.trim() || !apellidos.trim()) {
+      setErrorMessage('El nombre y los apellidos son obligatorios.');
+      return;
+    }
+
+    if (!email.trim() || !email.includes('@')) {
+      setErrorMessage('Introduce un correo electrónico válido.');
+      return;
+    }
+
     if (password.length < 6) {
       setErrorMessage('La contraseña debe tener al menos 6 caracteres.');
       return;
@@ -31,8 +57,9 @@ export function Register() {
       await register({
         nombre: nombre.trim(),
         apellidos: apellidos.trim(),
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         password,
+        rol,
       });
 
       setIsSuccess(true);
@@ -49,32 +76,32 @@ export function Register() {
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="inline-flex p-3 bg-blue-600 rounded-2xl shadow-xl shadow-blue-500/20 mb-4">
-          <GraduationCap className="w-10 h-10 text-white" />
+        <div className="inline-flex p-3 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl shadow-xl shadow-blue-500/20 mb-4">
+          <Users className="w-10 h-10 text-white" />
         </div>
         <h2 className="text-3xl font-extrabold tracking-tight text-white">
-          Registro de Alumno
+          Registro de Usuario
         </h2>
         <p className="mt-2 text-sm text-slate-400">
-          Crea tu cuenta de estudiante en Gestión Baleras
+          Crea tu cuenta de acceso en Gestión Baleras
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-slate-900 py-8 px-6 shadow-2xl rounded-2xl border border-slate-800 sm:px-10">
+        <div className="bg-slate-900 py-8 px-6 shadow-2xl rounded-3xl border border-slate-800 sm:px-10">
           {/* Mensaje de éxito */}
           {isSuccess && (
-            <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3">
+            <div className="mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start gap-3 animate-in fade-in">
               <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
               <p className="text-xs text-emerald-300 font-medium">
-                ¡Cuenta creada con éxito! Redirigiéndote a la pantalla de inicio de sesión...
+                ¡Cuenta de {rol} creada con éxito! Redirigiéndote al inicio de sesión...
               </p>
             </div>
           )}
 
           {/* Mensaje de error */}
           {errorMessage && (
-            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
+            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3 animate-in fade-in">
               <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
               <p className="text-xs text-rose-300 font-medium">
                 {errorMessage}
@@ -83,11 +110,61 @@ export function Register() {
           )}
 
           <form className="space-y-4" onSubmit={handleSubmit}>
+            {/* Selector de Rol */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Selecciona tu Rol / Perfil <span className="text-rose-400">*</span>
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRol('ALUMNO')}
+                  className={`p-3 rounded-2xl border text-center transition flex flex-col items-center gap-1.5 cursor-pointer ${
+                    rol === 'ALUMNO'
+                      ? 'bg-blue-500/15 border-blue-500/40 text-blue-300 shadow-sm shadow-blue-500/10'
+                      : 'bg-slate-800/40 border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-slate-300'
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span className="text-xs font-bold">ALUMNO</span>
+                  <span className="text-[10px] opacity-75">Estudiante</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setRol('PROFESOR')}
+                  className={`p-3 rounded-2xl border text-center transition flex flex-col items-center gap-1.5 cursor-pointer ${
+                    rol === 'PROFESOR'
+                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 shadow-sm shadow-emerald-500/10'
+                      : 'bg-slate-800/40 border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-slate-300'
+                  }`}
+                >
+                  <GraduationCap className="w-4 h-4" />
+                  <span className="text-xs font-bold">PROFESOR</span>
+                  <span className="text-[10px] opacity-75">Docente</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setRol('ADMIN')}
+                  className={`p-3 rounded-2xl border text-center transition flex flex-col items-center gap-1.5 cursor-pointer ${
+                    rol === 'ADMIN'
+                      ? 'bg-rose-500/15 border-rose-500/40 text-rose-300 shadow-sm shadow-rose-500/10'
+                      : 'bg-slate-800/40 border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-slate-300'
+                  }`}
+                >
+                  <Shield className="w-4 h-4" />
+                  <span className="text-xs font-bold">ADMIN</span>
+                  <span className="text-[10px] opacity-75">Gestor</span>
+                </button>
+              </div>
+            </div>
+
             {/* Nombre y Apellidos */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                  Nombre
+                  Nombre <span className="text-rose-400">*</span>
                 </label>
                 <div className="relative rounded-xl shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
@@ -106,7 +183,7 @@ export function Register() {
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                  Apellidos
+                  Apellidos <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -122,7 +199,7 @@ export function Register() {
             {/* Email */}
             <div>
               <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                Correo Electrónico
+                Correo Electrónico <span className="text-rose-400">*</span>
               </label>
               <div className="relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
@@ -131,7 +208,7 @@ export function Register() {
                 <input
                   type="email"
                   required
-                  placeholder="alumno@baleras.edu"
+                  placeholder="usuario@baleras.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
@@ -142,7 +219,7 @@ export function Register() {
             {/* Contraseña */}
             <div>
               <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                Contraseña (mínimo 6 caracteres)
+                Contraseña (mínimo 6 caracteres) <span className="text-rose-400">*</span>
               </label>
               <div className="relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
@@ -160,7 +237,7 @@ export function Register() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 hover:text-slate-300 transition cursor-pointer"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -181,7 +258,7 @@ export function Register() {
                     <span>Creando cuenta...</span>
                   </>
                 ) : (
-                  <span>Registrar Cuenta de Alumno</span>
+                  <span>Registrar Cuenta de Usuario ({rol})</span>
                 )}
               </button>
             </div>
@@ -201,4 +278,3 @@ export function Register() {
     </div>
   );
 }
-

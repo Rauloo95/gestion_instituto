@@ -256,7 +256,7 @@ class AuthControllerTest {
                         "apellidos": "Gómez Gómez",
                         "email": "pedro@test.com",
                         "password": "password123",
-                        "rol": "PROFESOR"
+                        "rol": "ALUMNO"
                     }
                     """;
 

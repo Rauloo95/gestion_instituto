@@ -156,7 +156,7 @@ export function Login() {
           {/* Enlace a Registro */}
           <div className="mt-6 text-center border-t border-slate-800 pt-5">
             <p className="text-xs text-slate-400">
-              ¿Eres nuevo estudiante y no tienes cuenta?{' '}
+              ¿No tienes una cuenta de usuario aún?{' '}
               <Link to="/register" className="font-semibold text-blue-400 hover:text-blue-300 transition">
                 Regístrate aquí
               </Link>

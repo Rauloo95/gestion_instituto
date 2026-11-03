@@ -33,6 +33,7 @@ API REST robusta, modular y escalable para la gestión académica y administrati
 10. [🧪 Suite de Pruebas y Calidad de Código](#-suite-de-pruebas-y-calidad-de-código)
 11. [Flujo de Ejemplo con cURL](#-flujo-de-ejemplo-con-curl)
 12. [Tecnologías Empleadas](#-tecnologías-empleadas)
+13. [🖥️ Frontend SPA (React + TypeScript + Vite + Tailwind)](#-frontend-spa-react--typescript--vite--tailwind)
 
 ---
 
@@ -754,6 +755,26 @@ curl -X GET http://localhost:8080/api/notas/mis-notas \
   - [Testcontainers](https://www.testcontainers.org/): Soporte de bases de datos PostgreSQL efímeras sobre Docker para testing de integración.
 - **Productividad:** [Project Lombok](https://projectlombok.org/) (reducción de boilerplate).
 - **Gestión de Construcción:** [Apache Maven](https://maven.apache.org/) y Maven Wrapper.
+
+---
+
+## 🖥️ Frontend SPA (React + TypeScript + Vite + Tailwind)
+
+El proyecto cuenta con un cliente frontend Single Page Application (SPA) moderno, reactivo y desacoplado, ubicado en la carpeta [`Frontend/`](file:///c:/Users/raulo/IdeaProjects/Gestion%20Baleras/Frontend):
+
+- **Stack Tecnológico:** React 19, TypeScript 5.7, Vite 8.3, Tailwind CSS v4, Lucide Icons, Axios y React Router v7.
+- **Seguridad RBAC:** Sesión con JWT persistida en `localStorage`, inyección de token en cabeceras de Axios (`Authorization: Bearer <token>`), control de expiración (`401 Unauthorized`) y protección de rutas con `<ProtectedRoute allowedRoles={[...]} />`.
+- **Módulos Cubiertos:**
+  1. **Autenticación:** Login con toggle de contraseña y credenciales de demo; Registro público de usuarios con selector de rol (`ALUMNO`, `PROFESOR`, `ADMIN`).
+  2. **Dashboard Adaptativo:** Panel central ajustado al perfil (`ADMIN`, `PROFESOR`, `ALUMNO`) con diagnóstico de sesión JWT.
+  3. **Centros Educativos:** Gestión y consulta de sedes con buscador reactivo.
+  4. **Formaciones & Asignaturas:** Interfaz en dos pestañas con navegación cruzada ("Ver asignaturas").
+  5. **Clases & Aulas:** Asignación de grupos, aulas y docentes titulares (con vista especializada de "Mis Clases" para profesores).
+  6. **Gestión de Usuarios:** Directorio por roles con protección de auto-bloqueo y contraseñas BCrypt.
+  7. **Matrículas:** Inscripciones con seguimiento de estados (`ACTIVA`, `FINALIZADA`, `CANCELADA`).
+  8. **Notas y Calificaciones:** Auditoría institucional para administradores, panel de evaluación con slider e indicadores en vivo para profesores, y boletín personal de notas para alumnos.
+
+> Para consultar la documentación técnica completa, arquitectura de componentes y guía de despliegue del frontend, consulta [`Frontend/README.md`](file:///c:/Users/raulo/IdeaProjects/Gestion%20Baleras/Frontend/README.md).
 
 ---
 
