@@ -61,16 +61,15 @@ public class ClaseService {
 
         // Un PROFESOR solo puede consultar sus propias clases
         if (usuarioActual.getRol() == Rol.PROFESOR
-                && !clase.getProfesor().getId().equals(usuarioActual.getId())) {
-
-            throw new AccessDeniedException(
-                    "No tienes permiso para consultar esta clase"
-            );
+                && clase.getProfesor().getId().equals(usuarioActual.getId())) {
+            return convertirAResponse(clase);
         }
 
         throw new AccessDeniedException(
                 "No tienes permiso para consultar esta clase"
         );
+
+
     }
 
     public List<ClaseResponse> obtenerPorAsignatura(Long asignaturaId) {

@@ -184,6 +184,18 @@ public class NotaService {
                     "Solo un profesor puede modificar notas"
             );
         }
+        // Comprobar que el profesor es propietario de la nota original
+        Long profesorDeLaNota = nota.getMatricula()
+                .getClase()
+                .getProfesor()
+                .getId();
+
+        if (!usuarioActual.getId().equals(profesorDeLaNota)) {
+
+            throw new AccessDeniedException(
+                    "No puedes modificar una nota que pertenece a otro profesor"
+            );
+        }
 
         Long profesorDeLaClase =
                 matricula.getClase()
